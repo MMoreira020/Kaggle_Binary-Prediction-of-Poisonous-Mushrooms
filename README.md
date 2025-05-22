@@ -1,85 +1,88 @@
-# Kaggle Playground Series S4E8 - Binary Prediction of Poisonous Mushrooms
+# Kaggle Playground Series S4E8 - Predição Binária de Cogumelos Venenosos
 
-This repository contains the code and analysis for the Kaggle Playground Series Season 4 Episode 8 competition: [Binary Prediction of Poisonous Mushrooms](https://www.kaggle.com/competitions/playground-series-s4e8/overview). The goal of this competition is to build a model that can accurately predict whether a mushroom is **poisonous (p)** or **edible (e)** based on a variety of features like cap shape, color, gill characteristics, and stem properties.
+Este repositório contém o código e a análise para a competição **Kaggle Playground Series Season 4 Episode 8**: [Predição Binária de Cogumelos Venenosos](https://www.kaggle.com/competitions/playground-series-s4e8/overview).  
+O objetivo desta competição é construir um modelo que consiga prever com precisão se um cogumelo é **venenoso (p)** ou **comestível (e)** com base em diversas características, como formato do chapéu, cor, características das lamelas e propriedades do caule.
 
 ---
 
-## Notebook Content
+## Conteúdo do Notebook
 
-The [predicting_poisonous_mushrooms.ipynb](predicting_poisonous_mushrooms.ipynb) notebook walks through the following steps:
+O notebook [predicting_poisonous_mushrooms.ipynb](predicting_poisonous_mushrooms.ipynb) percorre as seguintes etapas:
 
-1. **Data Loading and Exploration:**
-    - Loading the `train.csv` and `test.csv` datasets using pandas.
-    - Displaying the shape of the datasets and the first few rows of the training data.
+1. **Carregamento e Exploração dos Dados:**
+    - Carregamento dos arquivos `train.csv` e `test.csv` com o pandas.
+    - Exibição da forma dos conjuntos de dados e das primeiras linhas do conjunto de treino.
 
-2. **Missing Value Handling:**
-    - Identifying columns with missing values and their counts.
-    - Implementing a strategy to handle missing data:
-        - Dropping rows with missing values in columns with a small number of missing entries.
-        - Filling missing values with the string "missing" for columns with a large number of missing entries.
+2. **Tratamento de Valores Ausentes:**
+    - Identificação das colunas com valores ausentes e contagem dessas ocorrências.
+    - Implementação de uma estratégia para lidar com os dados ausentes:
+        - Remoção de linhas com poucos valores ausentes.
+        - Preenchimento dos valores ausentes com a string `"missing"` em colunas com muitos valores ausentes.
 
-3. **Value Counts Analysis:**
-    - Defining a function to calculate and display value counts and percentages for each column to understand data distribution.
-    - Applying this function to the training dataset to analyze the distribution of features.
+3. **Análise de Frequência de Valores:**
+    - Definição de uma função para calcular e exibir a contagem e porcentagem de valores únicos por coluna.
+    - Aplicação dessa função no conjunto de treino para entender a distribuição das variáveis.
 
-4. **Filtering Rare Categories:**
-    - Identifying and removing rows containing rare categories (occurring less than 200 times) in each feature column (excluding 'id' and 'class') to reduce noise and improve model generalization.
+4. **Filtragem de Categorias Raras:**
+    - Identificação e remoção de linhas com categorias raras (ocorrências menores que 200) em cada coluna de atributos (exceto ‘id’ e ‘class’) para reduzir ruído e melhorar a generalização do modelo.
 
-5. **Feature Engineering and Encoding:**
-    - Separating the target variable ('class') from the features in the training dataset.
-    - Performing one-hot encoding on categorical features to convert them into a numerical format suitable for machine learning models.
+5. **Engenharia e Codificação de Variáveis:**
+    - Separação da variável-alvo (‘class’) das variáveis preditoras.
+    - Codificação one-hot das variáveis categóricas para transformá-las em formato numérico adequado aos algoritmos de machine learning.
 
-6. **Preprocessing the Test Data:**
-    - Applying similar preprocessing steps (missing value handling and one-hot encoding) to the `test.csv` dataset to ensure consistency with the training data.
-    - Handling potential discrepancies in categorical features between the training and test sets by aligning columns after one-hot encoding.
+6. **Pré-processamento dos Dados de Teste:**
+    - Aplicação dos mesmos passos de tratamento (valores ausentes e codificação one-hot) ao arquivo `test.csv` para garantir consistência com o conjunto de treino.
+    - Alinhamento das colunas do conjunto de teste com o de treino após a codificação one-hot, tratando possíveis discrepâncias.
 
-7. **Correlation Analysis and Feature Selection:**
-    - Calculating the correlation matrix for the numerical features.
-    - Generating a **heatmap** of correlations to visually identify relationships between features.
-    - Saving the heatmap as an image (`mapa_correlacao.png`) for reference.
-    - Identifying **highly correlated feature pairs** (with Pearson correlation `r > 0.85`) to flag for potential removal or collinearity analysis.
-    - Example: `cap-diameter` and `stem-width` were found to be highly correlated (`r = 0.83`), suggesting caution during feature selection for linear models.
+7. **Análise de Correlação e Seleção de Variáveis:**
+    - Cálculo da matriz de correlação para os atributos numéricos.
+    - Geração de um **mapa de calor (heatmap)** das correlações para identificar visualmente relações entre variáveis.
+    - Salvamento do heatmap como imagem (`mapa_correlacao.png`) para referência.
+    - Identificação de **pares de atributos altamente correlacionados** (correlação de Pearson `r > 0.85`) para considerar remoção ou análise de colinearidade.
+    - Exemplo: `cap-diameter` e `stem-width` apresentaram alta correlação (`r = 0.83`), sugerindo atenção em modelos lineares.
 
     ![Mapa de Correlação](mapa_correlacao.png)
 
-8. **Data Splitting into Training and Validation Sets:**
-    - Splitting the preprocessed training data into training and validation sets using `train_test_split` from `sklearn.model_selection`.
-    - Using stratified splitting to maintain the class distribution in both sets.
+8. **Divisão dos Dados em Conjuntos de Treinamento e Validação:**
+    - Utilização da função `train_test_split` do `sklearn.model_selection` para dividir o conjunto de treino em treino e validação.
+    - Uso de divisão estratificada para manter a distribuição das classes nos dois subconjuntos.
 
-9. **Feature Scaling:**
-    - Applying `StandardScaler` from `sklearn.preprocessing` to standardize numerical features in both the training and validation sets to improve model performance and convergence.
+9. **Padronização dos Dados:**
+    - Aplicação do `StandardScaler` do `sklearn.preprocessing` para padronizar as variáveis numéricas, melhorando o desempenho e a convergência dos modelos.
 
-10. **Model Training and Evaluation:**
-    - Defining functions `train_model` and `evaluate_model` to streamline the process of training and evaluating different classifiers.
-    - Training and evaluating three different machine learning models:
-        - **Logistic Regression:** A linear model used as a baseline.
-        - **Random Forest Classifier:** An ensemble method known for its robustness and performance on tabular data.
-        - **XGBoost Classifier:** A gradient boosting algorithm, often achieving state-of-the-art results in classification tasks.
-    - Evaluating model performance using metrics such as Accuracy, F1-Score, Confusion Matrix, and AUC-ROC curve.
+10. **Treinamento e Avaliação dos Modelos:**
+    - Definição das funções `train_model` e `evaluate_model` para facilitar o treinamento e avaliação de diferentes classificadores.
+    - Treinamento e avaliação de três modelos de machine learning:
+        - **Regressão Logística:** Modelo linear usado como baseline.
+        - **Random Forest Classifier:** Método de ensemble conhecido pela robustez em dados tabulares.
+        - **XGBoost Classifier:** Algoritmo de boosting gradiente que frequentemente atinge desempenho de ponta em tarefas de classificação.
+    - Avaliação de desempenho com métricas como Acurácia, F1-Score, Matriz de Confusão e Curva AUC-ROC.
 
-11. **Prediction and Submission File Generation:**
-    - Scaling the test dataset using the `StandardScaler` fitted on the training data.
-    - Using the trained XGBoost model (the best performing model) to predict classes for the test dataset.
-    - Decoding the numerical predictions back to the original class labels ('e' or 'p').
-    - Creating a submission-ready CSV file (`predictions_xgb.csv`) with 'id' and 'class' columns.
-
----
-
-## Models and Performance
-
-The following models were trained and evaluated:
-
-| Model                    | Accuracy | F1 Score | AUC-ROC Score |
-|--------------------------|----------|----------|----------------|
-| Logistic Regression      | 0.8897   | 0.8897   | 0.9373         |
-| Random Forest Classifier | 0.9920   | 0.9920   | 0.9966         |
-| XGBoost Classifier       | 0.9924   | 0.9924   | 0.9968         |
-
-The **XGBoost Classifier** achieved the best performance on the validation set with an Accuracy of 0.9924 and an AUC-ROC Score of 0.9968. This model was used to generate the final predictions for the test set.
+11. **Predição e Geração do Arquivo de Submissão:**
+    - Padronização do conjunto de teste com o `StandardScaler` ajustado no treino.
+    - Uso do modelo XGBoost treinado (melhor desempenho) para prever as classes no conjunto de teste.
+    - Decodificação das previsões numéricas para os rótulos originais ('e' ou 'p').
+    - Criação de um arquivo CSV pronto para submissão (`predictions_xgb.csv`) com as colunas 'id' e 'class'.
 
 ---
 
-## Additional Notes
+## Modelos e Desempenho
 
-- The correlation analysis and variable filtering were useful to improve understanding of the dataset structure and to guide model design decisions.
-- The generated heatmap (`mapa_correlacao.png`) can be helpful for further feature selection, especially if dimensionality reduction or regularization is needed.
+Os seguintes modelos foram treinados e avaliados:
+
+| Modelo                    | Acurácia | F1-Score | AUC-ROC |
+|---------------------------|----------|----------|---------|
+| Regressão Logística       | 0.8897   | 0.8897   | 0.9373  |
+| Random Forest Classifier  | 0.9920   | 0.9920   | 0.9966  |
+| XGBoost Classifier        | 0.9924   | 0.9924   | 0.9968  |
+
+O **XGBoost Classifier** obteve o melhor desempenho no conjunto de validação com acurácia de 0.9924 e AUC-ROC de 0.9968. Esse modelo foi utilizado para gerar as previsões finais no conjunto de teste.
+
+---
+
+## Observações Adicionais
+
+- A análise de correlação e a filtragem de variáveis foram úteis para entender melhor a estrutura do dataset e orientar decisões no design do modelo.
+- O heatmap gerado (`mapa_correlacao.png`) pode ser útil em futuras etapas de seleção de atributos, especialmente se forem aplicadas técnicas de redução de dimensionalidade ou regularização.
+
+---
